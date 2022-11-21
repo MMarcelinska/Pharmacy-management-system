@@ -30,10 +30,18 @@
 - Daily meet up
 
 
-### Sprint 04 (2022.11.14 - 2022.11.18) TODO
+### Sprint 04 (2022.11.14 - 2022.11.18) DONE
 
 - Collecting data
 - Set up data base
 - Basic HTML5 and CSS UI template
 - Definition of some basic endpoints
 - Daily meet up
+
+### Sprint 05 (2022.11.21 - 2022.11.25) TODO
+
+- Definition of majority of endpoints
+- Writing automatic tests
+- Cleaning Jira
+- Basic sites React.js
+- Preparation of new necessary data
