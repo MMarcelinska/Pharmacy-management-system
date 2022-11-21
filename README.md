@@ -45,3 +45,4 @@
 - Cleaning Jira
 - Basic sites React.js
 - Preparation of new necessary data
+- Daily meet up
