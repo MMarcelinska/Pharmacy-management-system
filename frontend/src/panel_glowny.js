@@ -1,7 +1,13 @@
 
 import './panel.css';
 import {useState, useEffect} from 'react';
-
+import Routing from './route';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
 
 
 function Panel() {
@@ -36,17 +42,17 @@ function Panel() {
 
 
                 <nav>
-                    <ul>
-                        <a href="panel_glowny.js">Strona główna</a> 
+                    <Routing>
+                        <Link to="/panel_glowny">Strona główna</Link> 
                         <br></br>
                         <hr></hr>
-                        <a href="dostepne_leki.js">Dostępne leki</a> 
+                        <Link to="/dostepne_leki">Dostępne leki</Link> 
                         <br></br>
                         <hr></hr>
-                        <a href="zamiennik.js">Znajdź lek lub zamiennik</a>
+                        <Link to="/zamiennik">Znajdź lek lub zamiennik</Link>
                         <br></br>
                         <hr></hr>                  
-                        <a href="sprzedaz.js">Dokonaj sprzedaży</a>
+                        <Link to="/sprzedaz">Dokonaj sprzedaży</Link>
                         <br></br>
                         <hr></hr>
                         <a href="hurtownia.js">Zamów z hurtowni</a>
@@ -59,7 +65,7 @@ function Panel() {
                         <br></br>
                         <hr></hr>
                         <a href="./App.js">Wyloguj</a>
-                    </ul>
+                    </Routing>
                 </nav>
 
                 <article>

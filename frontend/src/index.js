@@ -21,7 +21,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     {/* <App /> */}
-    {/* <Panel /> */}
+    <Panel />
     { /*<Dostepne_leki/> */}
     {/* <Zamiennik /> */}
     {/*<Sprzedaz /> */} 
@@ -33,7 +33,7 @@ root.render(
     { /*<Edycja_Admin /> */}
     {/*<Usuwanie />*/}
     {/* <Edytowanie_pracownika/> */}
-    <Zmiana/>
+    {/* <Zmiana/> */}
   </React.StrictMode>
 );
 

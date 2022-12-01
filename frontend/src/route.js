@@ -1,48 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import Register from './Authorization/Rejestracja/Register';
-import Sprzedaz from './sprzedaz';
-import Panel from './panel_glowny';
-import Dostepne_leki from './dostepne_leki';
-import reportWebVitals from './reportWebVitals';
-import Bez_recepty from './bez_recepty';
-import Zamiennik from './zamiennik';
-import Recepta from './recepta';
-import Hurtownia from './hurtownia';
-import Edycja from './edycja';
-import Edycja_Admin from './edycja_admin';
-import Usuwanie from './usuwanie_pracownika';
-import Edytowanie_pracownika from './edytowanie_pracownika';
-import Zmiana from './zmiana_hasla';
+import Loadable from '@docusaurus/react-loadable';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link
 } from "react-router-dom";
 
-export default function Routing() {
-    return (
-      <Router>
+
+const PanelGlowny = Loadable({
+  loader: () => import('./panel_glowny'),
+  loading: () => null
+})
+
+const BaseRouter = () => (
           <Routes>
-            <Route path="/recepta.js">
-              <Recepta />
-            </Route>
-            <Route path="/bez_recepty.js">
+            <Route path="/recepta" render={(props) => <PandelGlowny {...props}/>
+            {/* <Route path="/bez_recepty">
               <Bez_recepty />
             </Route>
             <Route path="/dostepne_leki">
               <Dostepne_leki />
             </Route>
-            <Route path="/edycja_admin.js">
+            <Route path="/edycja_admin">
               <Edycja_Admin />
             </Route>
             <Route path="/hurtownia">
               <Hurtownia />
             </Route>
-            <Route path="/zamiennik.js">
+            <Route path="/zamiennik">
               <Zamiennik />
             </Route>
             <Route path="/usuwanie_pracownika">
@@ -53,9 +39,8 @@ export default function Routing() {
             </Route>
             <Route path="/">
               <Panel />
-            </Route>
+</Route> */}
           </Routes>
-      </Router>
     );
-  }
-  
+
+ export default BaseRouter; 

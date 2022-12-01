@@ -3,7 +3,13 @@ import Button from 'react-bootstrap/esm/Button';
 import './panel.css';
 import {useState, useEffect} from 'react';
 import Form from "react-bootstrap/Form";
-
+import Routing from './route';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
 
 function Zmiana() {
   const [data, setData] = useState([]);
@@ -65,7 +71,7 @@ function Zmiana() {
 
                 <nav>
                     <ul>
-                        <a href="panel_glowny.js">Strona główna</a> 
+                        <a href="/panel_glowny">Strona główna</a> 
                         <br />
                         <hr />
                         <a href="dostepne_leki.js">Dostępne leki</a> 
