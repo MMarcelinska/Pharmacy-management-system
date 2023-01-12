@@ -2,14 +2,14 @@ import io
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
-from .models import User, Drugs, DrugsInfo
+from .models import User, Drugs, DrugsInfo, PresInfo
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from atlassian import Confluence
-from .serializers import DrugsSerializer, DrugsInfoSerializer
+from .serializers import DrugsSerializer, DrugsInfoSerializer, UserSerializer, PresInfoSerializer
 
 import sys
 from pharamacy_system import settings
@@ -39,10 +39,12 @@ class LogView(APIView):
         mail = request.GET.get('mail', None)
         password = request.GET.get('password', None)
         user = User.objects.filter(mail=mail).values()
+
         try:
             expected_pass = user[0]['password']
         except IndexError:
-            expected_pass = ''
+            response = str(json.dumps({"res": "denial"}))
+            return HttpResponse(response, content_type="text/plain")
 
         if expected_pass == password:
             response = str(json.dumps({"res": "ok"}))
@@ -60,15 +62,16 @@ class RegisterView(APIView):
         login = request.GET.get('login', None)
         name = request.GET.get('name', None)
         surname = request.GET.get('surname', None)
+        pharmacy = request.GET.get('pharmacy', None)
         password = request.GET.get('password', None)
         exsist = self.check_user(login, mail)
         if exsist['login']:
             return HttpResponse('Istnieje juz konto o takim logine', status=409, content_type="text/plain")
         elif exsist['mail']:
             return HttpResponse('Istnieje juz konto o takim mailu', status=409, content_type="text/plain")
-        user = User(user_name=login, mail=mail, password=password, name=name, surname=surname)
+        user = User(user_name=login, mail=mail, password=password, name=name, surname=surname, pharmacy=pharmacy)
         user.save()
-        return HttpResponse('Pomyslnie zjerestorwany', status=201, content_type="text/plain")
+        return HttpResponse('Pomyslnie zarejestrowany', status=201, content_type="text/plain")
 
     @staticmethod
     def check_user(login, mail) -> dict[str, bool]:
@@ -100,9 +103,10 @@ class StockStatusView(APIView):
     @staticmethod
     def get(request):
         drugname = request.GET.get('drugname')
-        price = request.GET.get('price')
+        price = float(request.GET.get('price'))
         amount = request.GET.get('amount')
-
+        prescription = request.GET.get('prescription')
+        warehouse = request.GET.get('warehouse')
         drugInfo = DrugsInfo.objects.all()
 
 
@@ -121,7 +125,59 @@ class StockStatusView(APIView):
         elif amount:
             drugInfo = drugInfo.filter(amount=amount)
 
+        if prescription == "undefined":
+            pass
+        elif prescription:
+            drugInfo = drugInfo.filter(prescription=prescription)
+
+        if warehouse == "undefined":
+            pass
+        elif warehouse:
+            drugInfo = drugInfo.filter(warehouse=warehouse)
+
         serializer = DrugsInfoSerializer(drugInfo, many=True)
+        return Response(serializer.data)
+
+class PrescriptionStatusView(APIView):
+
+    @staticmethod
+    def get(request):
+        id = request.GET.get('id')
+        pesel = request.GET.get('pesel')
+        prescription_id = request.GET.get('prescription_id')
+        drug_name = request.GET.get('drug_name')
+        count = request.GET.get('count')
+        PresInfo = PresInfo.objects.all()
+
+        #to presinfo po równa się coś wywala
+
+        if id == "undefined":
+            pass
+        elif id:
+            PresInfo = PresInfo.filter(id=id)
+
+        if pesel == "undefined":
+            pass
+        elif pesel:
+            PresInfo = PresInfo.filter(pesel=pesel)
+
+        if prescription_id == "undefined":
+            pass
+        elif prescription_id:
+            PresInfo = PresInfo.filter(prescription_id=prescription_id)
+
+        if drug_name == "undefined":
+            pass
+        elif drug_name:
+            PresInfo = PresInfo.filter(drug_name=drug_name)
+
+        if count == "undefined":
+            pass
+        elif count:
+            PresInfo = PresInfo.filter(count=count)
+
+
+        serializer = PresInfoSerializer(PresInfo, many=True)
         return Response(serializer.data)
 
 
@@ -182,7 +238,7 @@ class DataDrugsView(APIView):
         condition = request.GET.get('condition')
         review = request.GET.get('review')
         rating = request.GET.get('rating')
-        useful = request.GET.get('rating')
+        useful = request.GET.get('useful')
 
         drug = Drugs.objects.all()
 
@@ -216,3 +272,40 @@ class DataTestView(APIView):
     def get(self, request):
         result = pd.DataFrame({'bla': [1, 2, 3], 'bla2': ['a', 'b', 'c']}).to_json(orient='index')
         return JsonResponse(json.loads(result), safe=False)
+
+
+class UpdatePasswordView(APIView):
+
+    @action(detail=False, methods=['get'])
+    def get(self, request):
+        mail = request.GET.get('mail')
+        new_password = request.GET.get('new_password')
+        try:
+            User.objects.filter(mail=mail).update(password=str(new_password))
+        except:
+            response = str(json.dumps({"res": "denial"}))
+            return HttpResponse(response, content_type="text/plain")
+
+        response = str(json.dumps({"res": "ok"}))
+        return HttpResponse(response, content_type="text/plain")
+
+
+class UserInfoView(APIView):
+
+    @action(detail=False, methods=['get'])
+    def get(self, request):
+        mail = request.GET.get('mail')
+        user = User.objects.filter(mail=mail).values()
+        response = str(json.dumps({"res": str(user)}))
+        return HttpResponse(response, content_type="text/plain")
+
+
+class UserView(APIView):
+
+        @staticmethod
+        def get(request):
+            mail = request.GET.get('mail')
+            userInfo = User.objects.filter(mail=mail).all()
+
+            serializer = UserSerializer(userInfo, many=True)
+            return Response(serializer.data)

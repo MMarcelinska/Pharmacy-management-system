@@ -16,8 +16,7 @@ function Zmiana() {
   const [newPass, setNewPass] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [oldPass, setOldPass] = useState("");
-  const [mail, setMail] = useState("");
-  const [auth, setAuth] = useState("");
+  const [mail, setMail] = useState(localStorage.getItem("mail"));
   const [logRes, setLogRes] = useState({"res": "F"});
 
   const fetchData = () => {
@@ -40,7 +39,7 @@ function Zmiana() {
 
 
   const check = () =>{
-    if(newPass == newPassword){
+    if(newPass === newPassword){
         return true
     }
     else {
@@ -51,13 +50,11 @@ function Zmiana() {
   const validateForm = () => {
     if(logRes === 'ok'){
         console.log("confirm")
-        setAuth("git")
         data.password = oldPass;
         return true
     }
     if (logRes === 'denial') {
         console.log('denail')
-        setAuth("zle haslo lub mail")
         return false
     }
 }
@@ -67,6 +64,7 @@ function Zmiana() {
         <header>
           <h1>TwojaApteka: Panel Pracownika</h1>
         </header>
+<<<<<<< HEAD
 
 
                 <nav>
@@ -95,6 +93,8 @@ function Zmiana() {
                         <a href="./App.js">Wyloguj</a>
                     </ul>
                 </nav>
+=======
+>>>>>>> 9882e113c5ea3e259c33d1f697281e89440e203f
                 <article>
             <Form onSubmit={check}>
             <Form.Group size="lg" controlId="password">
@@ -121,7 +121,7 @@ function Zmiana() {
             onChange={(e) => setOldPass(e.target.value)}
           />
         </Form.Group><br /><br />
-        <Button block="true" size="lg" type="submit" onClick={validateForm} onclick="alert('Twoje hasło zostało zmienione')" id="zzmień">
+        <Button block="true" size="lg" type="submit" onClick={validateForm} id="zzmień">
 				Zmień hasło
 				</Button>
             </Form>

@@ -1,11 +1,10 @@
 import avatar from './img/avatar.png';
 import './App.css';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 function App() {
@@ -13,6 +12,7 @@ function App() {
 	const [logRes, setLogRes] = useState({"res": "F"});
 	const [mail, setMail] = useState("");
 	const [password, setPassword] = useState("");
+	const navigate = useNavigate();
 
 	const download = () => {
 		const url = `http://127.0.0.1:8000/api/pharamcy/login?mail=${mail}&password=${password}`;
@@ -20,15 +20,14 @@ function App() {
 		.then(({data}) => {setLogRes(data.res)});
 	}
 
-
 	const validateForm = () => {
 			if(logRes === 'ok'){
-				console.log("confirm")
-				setAuth("git")
+				localStorage.setItem("mail", mail);
+				setAuth("git");
+				navigate('/');
 				return true
 			}
 			if (logRes === 'denial') {
-				console.log('denail')
 				setAuth("zle haslo lub mail")
 				return false
 			}
@@ -39,7 +38,7 @@ function App() {
 		<div className= "loginbox">
 		<img src={avatar} alt=''className = "avatar"/>
 			<h1>Zaloguj się</h1>
-			<Form onSubmit={download}>
+			<Form onClick={download}>
         <Form.Group size="lg" controlId="email">
           <Form.Label>Email</Form.Label>
           <Form.Control
@@ -60,7 +59,7 @@ function App() {
 		<p id='valider'>{auth}</p>
 		<div className='submitow'>
 			<div class="submitow-center">
-				<Button block="true" size="lg" type="submit" onClick={validateForm} id="zaloguj">
+				<Button block="true" size="lg" type="button" onClick={validateForm} id="zaloguj">
 				Zaloguj
 				</Button>
 			</div>

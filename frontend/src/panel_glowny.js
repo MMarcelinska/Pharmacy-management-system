@@ -11,12 +11,14 @@ import {
 
 
 function Panel() {
+    const [name, setName] = useState("");
+    const [surname, setSurame] = useState("");
+    const [pharmacy, setPharmacy] = useState("");
     const [user, setUser] = useState([]);
-    const [mail, setMail] = useState("");
-	const [password, setPassword] = useState("");
+    const [mail, setMail] = useState(localStorage.getItem("mail"));
 
     const fetchData = () => {
-        const url = `http://127.0.0.1:8000/api/pharamcy/login?mail=${mail}&password=${password}`;
+        const url = `http://127.0.0.1:8000/api/pharamcy/user?mail=${mail}`;
       fetch(url)
         .then((response) => response.json())
         .then((actualData) => {
@@ -31,7 +33,7 @@ function Panel() {
   
     useEffect(() => {
       fetchData();
-    }, []);
+    }, [mail]);
 
 
   return (
@@ -41,39 +43,14 @@ function Panel() {
                 </header>
 
 
-                <nav>
-                    <Routing>
-                        <Link to="/panel_glowny">Strona główna</Link> 
-                        <br></br>
-                        <hr></hr>
-                        <Link to="/dostepne_leki">Dostępne leki</Link> 
-                        <br></br>
-                        <hr></hr>
-                        <Link to="/zamiennik">Znajdź lek lub zamiennik</Link>
-                        <br></br>
-                        <hr></hr>                  
-                        <Link to="/sprzedaz">Dokonaj sprzedaży</Link>
-                        <br></br>
-                        <hr></hr>
-                        <a href="hurtownia.js">Zamów z hurtowni</a>
-                        <br></br>
-                        <hr></hr>
-                        <a href="#">Generuj raport</a>
-                        <br></br>
-                        <hr></hr>
-                        <a href="edycja.js">Zarządzaj kontem</a>
-                        <br></br>
-                        <hr></hr>
-                        <a href="./App.js">Wyloguj</a>
-                    </Routing>
-                </nav>
-
                 <article>
-                    <p>
-                        Zalogowałeś się jako: {user.name} {user.surname}
+                {user.map((item, index) => (
+                    <p key={index}>
+                        Zalogowałeś się jako: {item.name} {item.surname}
                         <br></br>
-                        Pracujesz w filii: {user.filia}
+                        Pracujesz w filii: {item.pharmacy}
                     </p>
+                    ))}          
                 </article>
         </div>
   );
